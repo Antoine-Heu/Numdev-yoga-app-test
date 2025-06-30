@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { SessionService } from 'src/app/services/session.service';
+import { expect } from '@jest/globals';
 
 import { MeComponent } from './me.component';
 
@@ -41,5 +42,17 @@ describe('MeComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should navigate back to the previous page', () => {
+    const navigateSpy = jest.spyOn(window.history, 'back');
+    component.back();
+    expect(navigateSpy).toHaveBeenCalled();
+  });
+
+  it('should delete the session', () => {
+    const deleteSpy = jest.spyOn(component, 'delete');
+    component.delete();
+    expect(deleteSpy).toHaveBeenCalled();
   });
 });

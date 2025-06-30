@@ -37,4 +37,21 @@ describe('RegisterComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should have a valid form when all fields are filled correctly', () => {
+    component.form.setValue({ email: 'valid@mail.com', firstName: 'Valid', lastName: 'User', password: 'validPassword' });
+    component.submit();
+    expect(component.onError).toBeFalsy();
+  });
+
+  it('should show an error message when form submission fails', () => {
+    component.form.setValue({ email: 'invalid', firstName: 'U', lastName: 'U', password: 'a' });
+    component.submit();
+    expect(component.onError).toBeTruthy();
+  });
+
+  it('should have invalid form when required fields are empty', () => {
+    component.form.setValue({ email: '', firstName: '', lastName: '', password: '' });
+    expect(component.form.valid).toBeFalsy();
+  });
 });

@@ -33,4 +33,15 @@ describe('ListComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should return a list of sessions', () => {
+    const sessions = component.sessions$;
+    expect(sessions).toBeDefined();
+  });
+
+  it('should return user information', () => {
+    const user = component.user;
+    expect(user).toBeDefined();
+    expect(user?.admin).toBeTruthy();
+  });
 });

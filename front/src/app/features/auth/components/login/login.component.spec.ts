@@ -12,6 +12,16 @@ import { SessionService } from 'src/app/services/session.service';
 
 import { LoginComponent } from './login.component';
 
+class MockSessionService {
+  login(credentials: { email: string; password: string }) {
+    if (credentials.email === 'is.valid@mail.com' && credentials.password === 'isValidPassword') {
+      return Promise.resolve(true);
+    } else {
+      return Promise.reject(new Error('Invalid credentials'));
+    }
+  }
+}
+
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
@@ -19,7 +29,7 @@ describe('LoginComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [LoginComponent],
-      providers: [SessionService],
+      providers: [{ provide: SessionService, useClass: MockSessionService }],
       imports: [
         RouterTestingModule,
         BrowserAnimationsModule,
@@ -38,5 +48,23 @@ describe('LoginComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should login successfully with valid credentials', () => {
+    component.form.setValue({ email: 'valid@mail.com', password: 'validPassword' });
+    component.submit();
+    expect(component.onError).toBeFalsy();
+  });
+
+  it('should show an error message for invalid credentials', () => {
+    component.form.setValue({ email: 'u', password: 'a' });
+    component.submit();
+    expect(component.onError).toBeTruthy();
+  });
+  
+  it('should show an error message if required fields are missing', () => {
+    component.form.setValue({ email: '', password: '' });
+    component.submit();
+    expect(component.onError).toBeTruthy();
   });
 });
