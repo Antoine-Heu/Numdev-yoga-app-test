@@ -1,3 +1,54 @@
+Cypress.Commands.add('loginAsAdmin', () => {
+  cy.visit('/login');
+
+  cy.intercept('POST', '/api/auth/login', {
+    body: {
+      id: 1,
+      username: 'admin',
+      firstName: 'firstName',
+      lastName: 'lastName',
+      email: 'admin@example.com',
+      admin: true
+    }
+  }).as('loginAsAdmin');
+
+  cy.get('input[formControlName=email]').type("yoga@studio.com");
+  cy.get('input[formControlName=password]').type('test!1234');
+
+  cy.get('input[formControlName=email]').should('have.value', 'yoga@studio.com');
+  cy.get('input[formControlName=password]').should('have.value', 'test!1234');
+
+  cy.get('button[type=submit]').click();
+  
+  cy.url().should('include', '/sessions');
+});
+
+Cypress.Commands.add('loginAsUser', () => {
+  cy.visit('/login');
+
+  cy.intercept('POST', '/api/auth/login', {
+    body: {
+      id: 1,
+      username: 'user',
+      firstName: 'firstName',
+      lastName: 'lastName',
+      email: 'user@example.com',
+      admin: false
+    }
+  }).as('loginAsUser');
+
+  cy.get('input[formControlName=email]').type("yoga@studio.com");
+  cy.get('input[formControlName=password]').type('test!1234');
+
+  cy.get('input[formControlName=email]').should('have.value', 'yoga@studio.com');
+  cy.get('input[formControlName=password]').should('have.value', 'test!1234');
+
+  cy.get('button[type=submit]').click();
+  
+  cy.url().should('include', '/sessions');
+});
+
+
 // ***********************************************
 // This example namespace declaration will help
 // with Intellisense and code completion in your

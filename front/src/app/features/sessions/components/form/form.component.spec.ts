@@ -6,7 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { expect } from '@jest/globals';
@@ -15,12 +15,17 @@ import { SessionApiService } from '../../services/session-api.service';
 
 import { FormComponent } from './form.component';
 import { of } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
+import { TeacherService } from 'src/app/services/teacher.service';
 
 describe('FormComponent', () => {
   let component: FormComponent;
   let fixture: ComponentFixture<FormComponent>;
   let mockSessionApiService: any;
   let mockRouter: any;
+  let mockActivatedRoute: any;
+  let mockTeacherService: any;
+  let mockMatSnackBar: any;
 
   const mockSessionService = {
     sessionInformation: {
@@ -46,9 +51,26 @@ describe('FormComponent', () => {
       url: '/sessions/update/1'
     };
 
+    mockActivatedRoute = {
+      snapshot: {
+        paramMap: {
+          get: jest.fn().mockReturnValue('1'), // Simule un paramètre d'URL "id"
+        },
+      },
+    };
+
+    mockTeacherService = {
+      all: jest.fn().mockReturnValue(of([])),
+    };
+
+    mockMatSnackBar = {
+      open: jest.fn(),
+    };
+
     await TestBed.configureTestingModule({
 
       imports: [
+        ReactiveFormsModule,
         RouterTestingModule,
         HttpClientModule,
         MatCardModule,
@@ -64,6 +86,10 @@ describe('FormComponent', () => {
         { provide: SessionService, useValue: mockSessionService },
         { provide: SessionApiService, useValue: mockSessionApiService },
         { provide: RouterTestingModule, useValue: mockRouter },
+        { provide: Router, useValue: mockRouter },
+        { provide: ActivatedRoute, useValue: mockActivatedRoute },
+        { provide: TeacherService, useValue: mockTeacherService },
+        { provide: MatSnackBar, useValue: mockMatSnackBar }
       ],
       declarations: [FormComponent]
     })
@@ -72,6 +98,23 @@ describe('FormComponent', () => {
     fixture = TestBed.createComponent(FormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+  });
+
+  it('should initialize the form without fetching session details if URL does not include "update"', () => {
+    mockRouter.url = '/sessions/create'; // Simule une URL sans "update"
+    fixture = TestBed.createComponent(FormComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  
+    expect(component.onUpdate).toBe(false);
+    expect(component['id']).toBeUndefined();
+    expect(mockSessionApiService.detail).not.toHaveBeenCalled();
+  });
+
+  it('should set onUpdate to true and fetch session details if URL includes "update"', () => {
+    expect(component.onUpdate).toBe(true);
+    expect(component['id']).toBe('1');
+    expect(mockSessionApiService.detail).toHaveBeenCalledWith('1');
   });
 
   it('should create', () => {

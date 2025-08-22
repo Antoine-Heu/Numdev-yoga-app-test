@@ -9,12 +9,14 @@ import { SessionService } from 'src/app/services/session.service';
 import { expect } from '@jest/globals';
 
 import { MeComponent } from './me.component';
+import { of } from 'rxjs';
 
 describe('MeComponent', () => {
   let component: MeComponent;
   let fixture: ComponentFixture<MeComponent>;
 
   const mockSessionService = {
+    delete: jest.fn().mockReturnValue(of({})),
     sessionInformation: {
       admin: true,
       id: 1
@@ -55,4 +57,5 @@ describe('MeComponent', () => {
     component.delete();
     expect(deleteSpy).toHaveBeenCalled();
   });
+  
 });

@@ -17,7 +17,7 @@ export class ListComponent {
   constructor(
     private sessionService: SessionService,
     private sessionApiService: SessionApiService
-  ) { }
+  ) { console.log('[ListComponent] initialized'); }
 
   get user(): SessionInformation | undefined {
     return this.sessionService.sessionInformation;
