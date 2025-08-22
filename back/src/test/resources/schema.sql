@@ -1,0 +1,37 @@
+CREATE TABLE IF NOT EXISTS TEACHERS (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(20) NOT NULL,
+    last_name VARCHAR(20) NOT NULL,
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS USERS (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(20) NOT NULL,
+    last_name VARCHAR(20) NOT NULL,
+    email VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(120) NOT NULL,
+    admin BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS SESSIONS (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    description VARCHAR(2000),
+    date TIMESTAMP,
+    teacher_id BIGINT,
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP,
+    FOREIGN KEY (teacher_id) REFERENCES TEACHERS(id)
+);
+
+CREATE TABLE IF NOT EXISTS PARTICIPATE (
+    user_id BIGINT,
+    session_id BIGINT,
+    PRIMARY KEY (user_id, session_id),
+    FOREIGN KEY (user_id) REFERENCES USERS(id),
+    FOREIGN KEY (session_id) REFERENCES SESSIONS(id)
+);
