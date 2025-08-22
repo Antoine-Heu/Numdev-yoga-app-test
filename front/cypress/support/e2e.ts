@@ -18,3 +18,4 @@
 
 import './commands';
 import '@cypress/code-coverage/support';
+import './index.d.ts';
