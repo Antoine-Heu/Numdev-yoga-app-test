@@ -1,6 +1,13 @@
-# Yoga
+# Yoga - Frontend
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.1.0.
+
+## Prerequisites
+
+- Node.js (version 14 or higher)
+- npm (Node Package Manager)
+- MySQL database
+- Backend application running (see backend README)
 
 ## Start the project
 
@@ -10,7 +17,7 @@ Git clone:
 
 Go inside folder:
 
-> cd yoga
+> cd front
 
 Install dependencies:
 
@@ -18,7 +25,9 @@ Install dependencies:
 
 Launch Front-end:
 
-> npm run start;
+> npm run start
+
+Application will be accessible at: `http://localhost:4200`
 
 
 ## Ressources
@@ -70,3 +79,34 @@ Launching test:
 for following change:
 
 > npm run test:watch
+
+#### Unit Test Coverage
+
+Unit test coverage is included when running jest tests.
+
+## Additional Commands
+
+### Linting
+
+Run ESLint to check code quality:
+
+> npm run lint
+
+### Cypress Commands
+
+Open Cypress test runner:
+
+> npm run cypress:open
+
+Run Cypress tests in headless mode:
+
+> npm run cypress:run
+
+## Technologies
+
+- Angular 14.2.0
+- Angular Material
+- RxJS
+- Jest (unit testing)
+- Cypress (E2E testing)
+- TypeScript
